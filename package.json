@@ -6,6 +6,14 @@
   "type": "module",
   "private": true,
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xindady/dsh-prompt-enhancer.git"
+  },
+  "homepage": "https://github.com/xindady/dsh-prompt-enhancer#readme",
+  "bugs": {
+    "url": "https://github.com/xindady/dsh-prompt-enhancer/issues"
+  },
   "keywords": [
     "dsh-plugin",
     "deepseek-harness",
@@ -27,6 +35,7 @@
     "cordis.patch.yml",
     "icon.svg",
     "locale/*.json",
+    "LICENSE",
     "README.md"
   ],
   "engines": {
