@@ -1,0 +1,6 @@
+# Bundle layer for dsh-prompt-enhancer: insert the Host half as one row.
+# The row keeps its literal name (no @local/* alias) so the installed package
+# resolves from the profile's node_modules.
+- insert:
+    - id: prompt-enhancer
+      name: 'dsh-prompt-enhancer'
