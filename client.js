@@ -54,7 +54,7 @@ window.__ModuleLoader__.load({
 			return tokens;
 		}
 
-		/** WorkBuddy's result cleaning: trim + strip one wrapping quote pair. */
+		/** Result cleaning: trim + strip one wrapping quote pair. */
 		function cleanResult(text) {
 			return text.trim().replace(/^["'"“”‘’]|["'"“”‘’]$/g, '').trim();
 		}

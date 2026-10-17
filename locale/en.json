@@ -1,6 +1,6 @@
 {
   "meta": {
     "title": "Prompt Enhancer",
-    "description": "One-click prompt enhancement in the composer toolbar with WorkBuddy rules, undo, and verbatim @file references"
+    "description": "One-click prompt enhancement in the composer toolbar with prompt-engineering rules, undo, and verbatim @file references"
   }
 }

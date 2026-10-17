@@ -1,8 +1,8 @@
 /**
  * dsh-prompt-enhancer — Host half.
  *
- * One POST route on the Host web server: enhance a draft with the WorkBuddy
- * Xo/Zo double-template through the Harness LLM service. The Client half owns
+ * One POST route on the Host web server: enhance a draft with a system + user
+ * double template through the Harness LLM service. The Client half owns
  * all draft reading/writing; this half never touches sessions.
  *
  * Route contract (browser JSON):
@@ -18,17 +18,16 @@ import { createHash, randomUUID } from 'node:crypto';
 const ROUTE_PATH = '/plugins/prompt-enhancer/enhance';
 /** Max accepted draft bytes (drafts are short; refuse absurd bodies early). */
 const MAX_INPUT_BYTES = 64 * 1024;
-/** Auxiliary-call timeout; the WorkBuddy original is a short one-shot. */
+/** Auxiliary-call timeout; prompt enhancement is a short one-shot. */
 const TIMEOUT_MS = 60_000;
 /** Billing/observability purpose tag on the LLM call. */
 const PURPOSE = 'prompt-enhancer';
 
 // ---------------------------------------------------------------------------
-// WorkBuddy original templates (verbatim from D:\workbuddy\resources\app.asar,
-// see WorkBuddy原版-增强提示词完整逻辑.md). Xo = system, Zo = user.
-// Only two scene phrases were adapted: "a development code assistant" /
-// "specializes in writing code" -> the Harness agent (a general computer-use
-// coding agent). Everything else is byte-identical to the original.
+// Enhancement templates. SYSTEM_PROMPT = system message (role, analysis
+// process, hard constraints); USER_TEMPLATE = user message ({input} carries
+// the user's draft). Two scene phrases were adapted to this Harness agent:
+// "a development code assistant" / "specializes in writing code".
 // ---------------------------------------------------------------------------
 
 const SYSTEM_PROMPT = `You are a Prompt Engineering Expert specializing in improving user prompts for a computer-use coding agent. When given a prompt, analyze and enhance it to create a more effective version while maintaining its core purpose. The requests are being made to an AI assistant that specializes in executing coding and workspace tasks.
@@ -99,8 +98,8 @@ ENHANCEMENT REQUIREMENTS:
 7. Do not add unrelated requirements, unsupported facts, or unnecessary sections.`;
 
 /**
- * WorkBuddy's result cleaning ($o): trim, then strip one pair of wrapping
- * quotes, straight or curly. Applied before the reference audit.
+ * Result cleaning: trim, then strip one pair of wrapping quotes, straight or
+ * curly. Applied before the reference audit.
  */
 function cleanResult(text) {
 	return text.trim().replace(/^["'"“”‘’]|["'"“”‘’]$/g, '').trim();
@@ -290,7 +289,7 @@ export function apply(ctx, config = {}) {
 
 /** Optional single-run CLI self test: node index.js "text". */
 export async function selfTest(text, env = process.env) {
-	const sample = text ?? '@提示词优化规则/WorkBuddy原版-增强提示词完整逻辑.md 帮我把这个文件总结成三句话';
+	const sample = text ?? '@docs/guide.md 帮我把这个文件总结成三句话';
 	const refs = extractReferences(sample);
 	return {
 		refs,
